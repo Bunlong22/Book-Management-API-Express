@@ -1,5 +1,5 @@
-const http = require("http");
-const url = require("url");
+const http = require("http"); //require the http server
+const url = require("url");   //require the url
 
 let books = [];
 
