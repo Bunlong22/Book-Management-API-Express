@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Book Managment System</title>
+  </head>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+  </style>
+  <body>
+    <button id="addBtn">Add Book</button>
+    <button id="viewBtn">View and Delete Books</button>
+    <button id="updateBtn">Update Book</button>
+
+    <!-- Add Book -->
+    <form id="addBookForm" style="display: none" action="/" method="post">
+      <input type="number" placeholder="ID" name="bookID" required />
+      <input type="text" placeholder="Book Name" name="bookName" required />
+      <input type="text" placeholder="Book Author" name="bookAuthor" required />
+      <input type="text" placeholder="Book Price" name="bookPrice" required />
+      <button type="submit">Add</button>
+    </form>
+
+    <!-- View Books -->
+    <table id="ViewBook" style="display: none">
+      <tr>
+        <th>ID</th>
+        <th>Book Name</th>
+        <th>Book Author</th>
+        <th>Book Price</th>
+        <th>Delete</th>
+      </tr>
+      <% data.forEach(book=> { %>
+      <tr>
+        <td><%= book.id %></td>
+        <td><%= book.bookName %></td>
+        <td><%= book.bookAuthor %></td>
+
+        <td><%= book.bookPrice %></td>
+        <td>
+          <form action="/delete" method="post">
+            <input type="hidden" name="bookName" value="<%= book.bookName %>" />
+            <button type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+      <% }) %>
+    </table>
+
+    <!-- Update Book -->
+    <form action="/update" method="post" id="updateBookForm">
+      <input type="text" placeholder="Book ID" name="id" />
+      <input type="text" placeholder="Book Name" name="bookName" />
+      <input type="text" placeholder="Book Author" name="bookAuthor" />
+      <input type="text" placeholder="Book Price" name="bookPrice" />
+      <button type="submit">Update</button>
+    </form>
+
+    <script>
+      // Function to show the add book form and hide other forms
+      function showAddForm() {
+        document.getElementById("addBookForm").style.display = "block";
+        document.getElementById("ViewBook").style.display = "none";
+        document.getElementById("updateBookForm").style.display = "none";
+        document.getElementById("deleteBookForm").style.display = "none";
+      }
+
+      // Function to show the view books table and hide other forms
+      function showViewTable() {
+        document.getElementById("ViewBook").style.display = "block";
+        document.getElementById("addBookForm").style.display = "none";
+        document.getElementById("updateBookForm").style.display = "none";
+        document.getElementById("deleteBookForm").style.display = "none";
+      }
+
+      // Function to show the update book form and hide other forms
+      function showUpdateForm() {
+        document.getElementById("updateBookForm").style.display = "block";
+        document.getElementById("addBookForm").style.display = "none";
+        document.getElementById("ViewBook").style.display = "none";
+        document.getElementById("deleteBookForm").style.display = "none";
+      }
+
+      // Add event listeners to the buttons
+      document.getElementById("addBtn").addEventListener("click", showAddForm);
+      document
+        .getElementById("viewBtn")
+        .addEventListener("click", showViewTable);
+      document
+        .getElementById("updateBtn")
+        .addEventListener("click", showUpdateForm);
+      // Set the default view as "View Books" when the page is loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        showViewTable();
+      });
+
+      // After completing any operation, reset the view to "View Books"
+      function resetView() {
+        showViewTable();
+      }
+
+      // Add event listener to reset the view after any operation
+      document
+        .getElementById("addBookForm")
+        .addEventListener("submit", resetView);
+    </script>
+  </body>
+</html>
