@@ -121,13 +121,26 @@
 const express = require("express");
 const app = express();
 
-let books = [];
+let books = [
+  {
+    id: 1,
+    bookName: "A",
+    bookAuthor: "Mr. A",
+    bookPrice: 240,
+  },
+  {
+    id: 2,
+    bookName: "B",
+    bookAuthor: "Mr. B",
+    bookPrice: 240,
+  },
+];
 
 app.use(express.json());
 
 app.get("/", (req, res) => {
   // res.status(200).json(books);
-  res.send("Hello and Welcome to Book Management")
+  res.send("Hello and Welcome to Book Management");
 });
 app.get("/books", (req, res) => {
   res.status(200).json(books);
