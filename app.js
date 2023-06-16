@@ -134,26 +134,24 @@ let books = [
     bookAuthor: "Mr. B",
     bookPrice: 240,
   },
+  {
+    id: 3,
+    bookName: "C",
+    bookAuthor: "Mr. C",
+    bookPrice: 240,
+  },
 ];
 
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  // res.status(200).json(books);
   res.send("Hello and Welcome to Book Management");
 });
 app.get("/books", (req, res) => {
   res.status(200).json(books);
 });
-
-app.post("/books", (req, res) => {
-  const newBook = req.body;
-  books.push(newBook);
-  res.status(201).json(newBook);
-});
-
 app.get("/books/:id", (req, res) => {
-  const bookId = req.params.id;
+  const bookId = parseInt(req.params.id);
   const book = books.find((item) => item.id === bookId);
 
   if (book) {
@@ -163,18 +161,32 @@ app.get("/books/:id", (req, res) => {
   }
 });
 
-app.put("/books/:id", (req, res) => {
-  const bookId = req.params.id;
-  const updatedBook = req.body;
-  const index = books.findIndex((item) => item.id === bookId);
-
-  if (index !== -1) {
-    books[index] = { ...books[index], ...updatedBook };
-    res.status(200).json(books[index]);
+app.post("/books", (req, res) => {
+  const newBook = req.body;
+  if (!newBook.id || !newBook.bookName || !newBook.bookAuthor || !newBook.bookPrice) {
+    res.status(400).send("Incomplete book data");
   } else {
-    res.status(404).send("Book not found");
+    books.push(newBook);
+    res.status(201).json(newBook);
   }
 });
+
+app.put("/books/:id", (req, res) => {
+  const bookId = parseInt(req.params.id);
+  const updatedBook = req.body;
+  if (!updatedBook.id || !updatedBook.bookName || !updatedBook.bookAuthor || !updatedBook.bookPrice) {
+    res.status(400).send("Incomplete book data");
+  } else {
+    const index = books.findIndex((item) => item.id === bookId);
+    if (index !== -1) {
+      books[index] = { ...books[index], ...updatedBook };
+      res.status(200).json(books[index]);
+    } else {
+      res.status(404).send("Book not found");
+    }
+  }
+});
+
 
 app.delete("/books/:id", (req, res) => {
   const bookId = req.params.id;
